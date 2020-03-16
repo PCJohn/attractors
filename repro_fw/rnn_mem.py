@@ -13,7 +13,7 @@ class LSTM():
         self.hid_size = 64
         self.lr = 1e-3
         self.bz = 64
-        self.niter = 75000
+        self.niter = 50000
         self.build_graph()
 
     def build_graph(self):
@@ -35,20 +35,23 @@ class FastWeights():
         self.x = tf.placeholder(tf.float32,shape=(None,seq_len,dim),name='input_ph')
         self.y = tf.placeholder(tf.int32,shape=(None,dim),name='label_ph')
         self.hid_size = 64
-        self.memmat = tf.eye(self.hid_size) * 0.05
+        self.memmat = tf.zeros([self.hid_size,self.hid_size],dtype=tf.float32)
         self.hid = tf.zeros(shape=(tf.shape(self.x)[0],self.hid_size),dtype=tf.float32)
         self.inner_loop = 1
         self.lr = 1e-3
         self.fast_lr = 0.5
         self.decay = 0.9
         self.bz = 64
-        self.niter = 75000
+        self.niter = 25000
         self.build_graph()
                 
     def build_graph(self):
+        W = 0.05 * tf.Variable(tf.eye(self.hid_size),trainable=True)
+        C = tf.Variable(tfu.xinit(shape=[self.dim,self.hid_size]),trainable=True)
+        
         for t in range(self.seq_len):
             x_t = self.x[:,t,:]
-            z = tfu.dense(self.hid,self.hid_size,act=None) + tfu.dense(x_t,self.hid_size,act=None)
+            z = tf.matmul(self.hid,W) + tf.matmul(x_t,C)
             h_0 = tfu.relu(z)
 
             # insert in memory
@@ -65,8 +68,8 @@ class FastWeights():
             # update hidden state
             self.hid = h_s
         
-        out = tfu.dense(self.hid,100,act=tfu.relu)
-        logits = tfu.dense(out,self.dim)
+        final_state = tfu.dense(self.hid,100,act=tfu.relu)
+        logits = tfu.dense(final_state,self.dim)
         self.pred =  tfu.softmax(logits)
         self.loss = tf.losses.softmax_cross_entropy(onehot_labels=self.y,logits=logits)
         opt = tf.train.AdamOptimizer(learning_rate=self.lr)
