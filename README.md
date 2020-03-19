@@ -3,6 +3,7 @@ A set of simulations on attractor models
 
 **Reproducing Fast Weights results**
 
+      cd repro_fw
       python retrieval.py
       python retrieval.py lstm_vs_fw 8
 
