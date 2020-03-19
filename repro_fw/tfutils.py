@@ -20,4 +20,3 @@ def layer_norm(inp):
 def outer(a,b):
     return tf.matmul(tf.expand_dims(a,-1),tf.transpose(tf.expand_dims(b,-1),[0,2,1]))
 
-
