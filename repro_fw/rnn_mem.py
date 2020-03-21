@@ -50,7 +50,7 @@ class LSTM():
 
 
 class FastWeights():
-    def __init__(self,seq_len,dim,learn_embed=False):
+    def __init__(self,seq_len,dim,learn_embed=False,S=1):
         self.seq_len = seq_len
         self.dim = dim
         self.learn_embed = learn_embed
@@ -60,7 +60,7 @@ class FastWeights():
         self.hid_size = 30
         self.memmat = tf.zeros([self.hid_size,self.hid_size],dtype=tf.float32)
         self.hid = tf.zeros(shape=(tf.shape(self.x)[0],self.hid_size),dtype=tf.float32)
-        self.inner_loop = 1
+        self.inner_loop = S
         self.lr = 1e-4
         self.fast_lr = 0.5
         self.decay = 0.9
@@ -71,12 +71,15 @@ class FastWeights():
     def build_graph(self):
         if self.learn_embed:
             in_seq = embed(self.x,self.embed_size)
-            C = tf.Variable(tfu.xinit([self.embed_size,self.hid_size]),trainable=True,dtype=tf.float32)
+            C = tf.Variable(tfu.xinit([self.embed_size,self.hid_size]),trainable=True,dtype=tf.float32,name='C')
         else:
             in_seq = self.x
-            C = tf.Variable(tfu.xinit([self.dim,self.hid_size]),trainable=True,dtype=tf.float32)
+            C = tf.Variable(tfu.xinit([self.dim,self.hid_size]),trainable=True,dtype=tf.float32,name='C')
 
-        W = tf.Variable(0.05*tf.eye(self.hid_size),trainable=True,dtype=tf.float32)
+        W = tf.Variable(0.05*tf.eye(self.hid_size),trainable=True,dtype=tf.float32,name='W')
+       
+        ln_gain = tf.Variable(tf.ones([self.hid_size]),trainable=True,dtype=tf.float32,name='ln_gain')
+        ln_bias = tf.Variable(tf.zeros([self.hid_size]),trainable=True,dtype=tf.float32,name='ln_bias')
         
         for t in range(self.seq_len):
             x_t = in_seq[:,t,:]
@@ -91,15 +94,16 @@ class FastWeights():
             h_s = tf.expand_dims(h_0,-1)
             z_ = tf.expand_dims(z,-1)
             for _ in range(self.inner_loop):
-                h_s = tfu.layer_norm(z_ + tf.matmul(self.memmat,h_s))
+                h_s = tfu.layer_norm(z_ + tf.matmul(self.memmat,h_s), ln_gain, ln_bias)
+                
                 h_s = tfu.relu(h_s)
             h_s = tf.squeeze(h_s,-1)
 
             # update hidden state
             self.hid = h_s
         
-        out = tfu.dense(self.hid,100,act=tfu.relu)
-        logits = tfu.dense(out,self.dim)
+        out = tfu.dense(self.hid,100,act=tfu.relu,name='out')
+        logits = tfu.dense(out,self.dim,name='logits')
         self.pred =  tf.argmax(tfu.softmax(logits),axis=1)
         self.loss = tf.losses.sparse_softmax_cross_entropy(labels=self.y,logits=logits)
         self.opt_op = tf.train.AdamOptimizer(learning_rate=self.lr).minimize(self.loss)
