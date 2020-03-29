@@ -15,4 +15,4 @@ This reproduces the results in section 4.1 of the paper with 30 hidden units (yo
 
      python noise.py
 
-<img src="repro_fw/outputs/noise.png" width="400" height="300" />
+<img src="repro_fw/outputs/noise.png" width="375" height="300" />
