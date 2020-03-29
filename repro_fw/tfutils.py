@@ -16,11 +16,16 @@ def dense(inp,size,act=None,name=None):
     return outp
 
 def layer_norm(inp,gain,bias):
+    #import pdb; pdb.set_trace();
     mean,var = tf.nn.moments(inp,1)
     inp = tf.squeeze(inp,-1)
     std = tf.sqrt(var)
+    #mean = tf.reduce_mean(inp,1)
+    #std = tf.sqrt(tf.reduce_mean(tf.square(inp-mean),1))
     norm = (inp-mean) / (std + 1e-5)
-    return tf.expand_dims(gain * norm + bias, -1)
+    k_ = tf.expand_dims(gain * norm + bias, -1)
+    #import pdb; pdb.set_trace();
+    return k_
 
 def outer(a,b):
     return tf.matmul(tf.expand_dims(a,-1),tf.transpose(tf.expand_dims(b,-1),[0,2,1]))

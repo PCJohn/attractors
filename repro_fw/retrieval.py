@@ -1,3 +1,12 @@
+'''
+Reproduce associative  recall experiment
+Usage: 
+        1. Generate and save dataset --
+                python retrieval.py gen_data
+        
+        2. Run experiment --
+                python retrieval.py lstm_vs_fw <sequence_len>
+'''
 from __future__ import print_function
 import os
 import sys
@@ -18,7 +27,9 @@ seq_lens = range(2,22,2)
 data_dir = './data'
 output_dir = './outputs'
 delim = '?'
-learn_embed = True
+learn_embed = False
+fw_inner_loop = 1
+fw_shared_ln = False
 ##### *** #####
 
 def ds_file(seq_len):
@@ -92,13 +103,16 @@ if __name__ == '__main__':
         x,y,vx,vy = ds['trainx'],ds['trainy'],ds['valx'],ds['valy']
         in_len = x.shape[1]
         embed_dim = x.shape[2]
-        rnn_models = ['LSTM','FW'][::-1]
+        rnn_models = ['LSTM','FW']
         for modelname in rnn_models:
             with tf.Session() as sess:
                 if modelname == 'LSTM':
                     model = rnn_mem.LSTM(in_len, embed_dim, learn_embed=learn_embed)
                 elif modelname == 'FW':
-                    model = rnn_mem.FastWeights(in_len, embed_dim, learn_embed=learn_embed)
+                    model = rnn_mem.FastWeights(in_len, embed_dim, 
+                                learn_embed=learn_embed,
+                                inner_loop=fw_inner_loop,
+                                shared_ln=fw_shared_ln)
                 val,loss = rnn_mem.train(sess,model,x,y,vx,vy)
                 plot_val_and_loss(val,loss,modelname)
                 final_val = val[-1]
