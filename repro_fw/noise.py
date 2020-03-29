@@ -45,6 +45,8 @@ if __name__ == '__main__':
     for m,name in zip(models,names):
         plt.plot(noise_levels,model_acc[m],marker='o',label=name)
     plt.legend()
+    plt.ylabel('Test Acc.')
+    plt.xlabel('Noise Std.')
     plt.show()
 
 
