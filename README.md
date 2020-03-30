@@ -17,6 +17,8 @@ Training in practice: 1. Layer normalization helps a lot particularly if you hav
 
      python noise.py
 
+Results with sequence lengths 4 and 8. The drop in accuracy is less if the sequence is short, as it needs to save fewer memories.
+
 <p float="left">
       <img src="repro_fw/outputs/noise-4.png" width="375" height="300" />
       <img src="repro_fw/outputs/noise-8.png" width="375" height="300" />
