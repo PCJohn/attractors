@@ -11,6 +11,8 @@ This reproduces the results in section 4.1 of the paper with 30 hidden units (yo
 
 <img src="repro_fw/outputs/seqlen-8.png" width="650" height="400" />
 
+Training in practice: 1. Layer normalization helps a lot particularly if you have different gains, biases for every inner loop iterations. 2. You can use an aggressive learning rate and explicitly drop it after some iterations.
+
 **Robustness to noise:** Add noise to the query (last element in the sequence) and track test accuracy.
 
      python noise.py
