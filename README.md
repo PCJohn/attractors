@@ -17,4 +17,8 @@ Training in practice: 1. Layer normalization helps a lot particularly if you hav
 
      python noise.py
 
-<img src="repro_fw/outputs/noise.png" width="375" height="300" />
+<p float="left">
+      <img src="repro_fw/outputs/noise-4.png" width="375" height="300" />
+      <img src="repro_fw/outputs/noise-8.png" width="375" height="300" />
+</p>
+
