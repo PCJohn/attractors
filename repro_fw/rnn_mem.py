@@ -44,7 +44,6 @@ class LSTM():
         logits = tfu.dense(out,self.dim)
         self.pred = tf.argmax(tfu.softmax(logits),axis=1)
         self.loss = tf.losses.sparse_softmax_cross_entropy(labels=self.y,logits=logits)
-        #self.opt_op = tf.train.AdamOptimizer(learning_rate=self.lr).minimize(self.loss)
         self.opt_op = tf.train.AdamOptimizer(learning_rate=self.lr_ph).minimize(self.loss)
 
 

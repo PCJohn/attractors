@@ -15,13 +15,14 @@ def add_query_noise(x,level):
 
 
 if __name__ == '__main__':
-    ds = np.load('data/keyval_8.npz')
+    seq_len = 2
+    ds = np.load('data/keyval_'+str(seq_len)+'.npz')
     tx,ty = ds['testx'],ds['testy']
    
     # Add noise to queries
     noise_levels = np.arange(0,1.0,0.05)
     noisy_x = [add_query_noise(tx,level) for level in noise_levels]
-    models = ['outputs/LSTM_seqlen-8','outputs/FW_seqlen-8']
+    models = ['outputs/LSTM_seqlen-'+str(seq_len),'outputs/FW_seqlen-'+str(seq_len)]
     inner_loops = [0,1]
     names = ['LSTM','FW']
     
