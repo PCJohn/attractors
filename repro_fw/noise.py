@@ -15,7 +15,7 @@ def add_query_noise(x,level):
 
 
 if __name__ == '__main__':
-    seq_len = 2
+    seq_len = 8
     ds = np.load('data/keyval_'+str(seq_len)+'.npz')
     tx,ty = ds['testx'],ds['testy']
    
