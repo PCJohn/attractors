@@ -29,7 +29,7 @@ output_dir = './outputs'
 delim = '?'
 learn_embed = False
 fw_inner_loop = 1
-fw_shared_ln = False
+fw_shared_ln = True
 ##### *** #####
 
 def ds_file(seq_len):
@@ -103,7 +103,7 @@ if __name__ == '__main__':
         x,y,vx,vy = ds['trainx'],ds['trainy'],ds['valx'],ds['valy']
         in_len = x.shape[1]
         embed_dim = x.shape[2]
-        rnn_models = ['LSTM','FW']
+        rnn_models = ['FW','LSTM']
         for modelname in rnn_models:
             with tf.Session() as sess:
                 if modelname == 'LSTM':
