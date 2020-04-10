@@ -26,3 +26,9 @@ Results with sequence lengths 4 and 8. The drop in accuracy is less if the seque
       <img src="repro_fw/outputs/noise-8.png" width="375" height="300" />
 </p>
 
+**Test on longer sequences**
+
+Train on a short sequence and test on longer sequences
+
+<img src="repro_fw/outputs/hid30-longer.png" width="375" height="300" />
+
