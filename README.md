@@ -35,7 +35,7 @@ Train on a sequences of fixed length and test on sequences of different lengths.
 **Hopfield nets with discrete states**
 
       cd hopfield
-      python hopfield.py lookup # standard hopfield memory lookup
-      python hopfield.py sequence # hopfield net hopping over discrete states
+      python hopfield.py lookup     # standard hopfield memory lookup
+      python hopfield.py sequence   # hopfield net hopping over discrete states
 
 <img src="hopfield/sequence.gif" width="375" height="300" />
