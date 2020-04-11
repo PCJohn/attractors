@@ -1,5 +1,8 @@
+import sys
 import numpy as np
 from matplotlib import pyplot as plt
+
+import viz
 
 ##### Utils #####
 
@@ -24,6 +27,12 @@ def accuracy(pred,anchors):
         if pred_anchor == i:
             corr += 1
     return corr / float(anchors.shape[0])
+
+# Add noise: flip some fraction of bits
+def flip_noise(x,noise_level):
+    noise = np.random.random(size=x.shape)
+    x[noise<noise_level] *= -1
+    return x
 
 ##### *** #####
 
@@ -66,20 +75,43 @@ class Hopfield():
 
 
 if __name__ == '__main__':
-    state_transitions = np.array([
+    # Standard Hopfield for memory lookup
+    if sys.argv[1] == 'lookup':
+        num_mem = 5
+        embed_dim = 40
+        # Generate random zero-centred vectors to save in memory
+        mem_x = np.random.random(size=(num_mem,embed_dim))
+        mem_x[mem_x<0.5] = -1
+        mem_x[mem_x>0.5] = 1
+        mem = Hopfield(mem_x)
+        # Add noise to the attractors -- use these as queries to lookup in memory
+        queries = np.array([flip_noise(x,0.3) for x in mem_x])
+        #queries = np.array([x+np.random.normal(0,1,size=x.shape) for x in mem_x])
+        rand_query = queries[np.random.randint(queries.shape[0])]
+        lookup_seq = mem.lookup(rand_query,n_step=40,return_seq=True)
+        import pdb; pdb.set_trace();
+        # Visualize transitions for lookup
+        viz.disp_states(mem_x,lookup_seq,'./lookup.mp4')
+
+    # Hopfield net with discrete state jumps 
+    elif sys.argv[1] == 'sequence':
+        state_transitions = np.array([
                             [0,1,0,0,0],
                             [0,0,1,0,0],
                             [0,0,0,1,0],
                             [0,0,0,0,1],
                             [1,0,0,0,0]])
-    embed_dim = 100
-    x = embed_nodes(state_transitions,embed_dim) # assign random binary vectors to each symbol
-    mem = Hopfield(x,transitions=state_transitions)
+        embed_dim = 100
+        x = embed_nodes(state_transitions,embed_dim) # assign random binary vectors to each symbol
+        mem = Hopfield(x,transitions=state_transitions)
     
-    # Generate a sequence obeying the transitions matrix above
-    seq_len = 40
-    seq = mem.lookup(x[0],n_step=seq_len,return_seq=True) # prompt with the first symbol and generate a sequence
-    seq_states = [get_state(x,s) for s in seq]
-    print('Retrieved sequence:',seq_states)
+        # Generate a sequence obeying the transitions matrix above
+        seq_len = 40
+        seq = mem.lookup(x[0],n_step=seq_len,return_seq=True) # prompt with the first symbol and generate a sequence
+        seq_states = [get_state(x,s) for s in seq]
+        print('Retrieved sequence:',seq_states)
+
+        # Visualize state transitions
+        viz.disp_states(x,seq,'./sequence.mp4')
 
 
