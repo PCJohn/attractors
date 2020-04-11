@@ -26,11 +26,10 @@ Results with sequence lengths 4 and 8. The drop in accuracy is less if the seque
       <img src="repro_fw/outputs/noise-8.png" width="375" height="300" />
 </p>
 
-**Test on longer sequences**
+**Other tasks**
 
-Train on a sequences of fixed length and test on sequences of different lengths.
 
-<img src="repro_fw/outputs/hid30-longer.png" width="375" height="300" />
+
 
 **Hopfield nets with discrete states**
 
