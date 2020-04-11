@@ -32,3 +32,6 @@ Train on a short sequence and test on longer sequences
 
 <img src="repro_fw/outputs/hid30-longer.png" width="375" height="300" />
 
+**Hopfield nets with discrete states**
+
+<img src="hopfield/sequence.gif" width="375" height="300" />
