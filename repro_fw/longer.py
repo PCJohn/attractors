@@ -30,7 +30,7 @@ if __name__ == '__main__':
         
             ds = np.load('data/keyval_'+str(seq_len)+'.npz')
             tx,ty = ds['testx'],ds['testy']
-        
+
             with tf.Session() as sess:
                 model = rnn_mem.FastWeights(tx.shape[1],tx.shape[2],learn_embed=False,shared_ln=True,inner_loop=1)
                 sess.run(tf.global_variables_initializer())

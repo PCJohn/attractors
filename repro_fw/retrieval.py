@@ -62,7 +62,6 @@ def gen_ds(seq_len):
     for _ in range(n_train+n_val+n_test):
         seq,v = gen_seq(seq_len)
         x.append(np.array([embed[c] for c in seq]))
-        #y.append(embed[v])
         y.append(char_ids[v])
     x,y = np.array(x),np.array(y)
     train = [x[:n_train],y[:n_train]]
@@ -101,6 +100,7 @@ if __name__ == '__main__':
         seq_len = int(sys.argv[2])
         ds = np.load(os.path.join(data_dir,ds_file(seq_len)))
         x,y,vx,vy = ds['trainx'],ds['trainy'],ds['valx'],ds['valy']
+        
         in_len = x.shape[1]
         embed_dim = x.shape[2]
         rnn_models = ['FW','LSTM']
