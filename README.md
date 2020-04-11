@@ -34,8 +34,13 @@ Train on a sequences of fixed length and test on sequences of different lengths.
 
 **Hopfield nets with discrete states**
 
+A standard Hopfield model pushes states towards attractors. Once in a basin, the state is stable and doesn't move around (gif on the left). Following [1], we can add cross-terms to the weight matrix to make the state hop around over attractors (gif on the right). This lets us store sequences of discrete symbols.
+
       cd hopfield
       python hopfield.py lookup     # standard hopfield memory lookup
       python hopfield.py sequence   # hopfield net hopping over discrete states
 
-<img src="hopfield/sequence.gif" width="375" height="300" />
+<p float="left">
+      <img src="hopfield/lookup.gif" width="375" height="300" />
+      <img src="hopfield/sequence.gif" width="375" height="300" />
+</p>
