@@ -45,7 +45,7 @@ class Hopfield():
         self.J = np.matmul(x.T,x) / float(dim)
         
         # Add cross-terms so the model hops around on points as discrete states
-        if transitions is not None:
+        if not (transitions is None):
             lmbda = 3.0
             for i in range(transitions.shape[0]):
                 for j in range(transitions[i].shape[0]):
@@ -78,18 +78,17 @@ if __name__ == '__main__':
     # Standard Hopfield for memory lookup
     if sys.argv[1] == 'lookup':
         num_mem = 5
-        embed_dim = 40
+        embed_dim = 100
         # Generate random zero-centred vectors to save in memory
         mem_x = np.random.random(size=(num_mem,embed_dim))
         mem_x[mem_x<0.5] = -1
         mem_x[mem_x>0.5] = 1
         mem = Hopfield(mem_x)
         # Add noise to the attractors -- use these as queries to lookup in memory
-        queries = np.array([flip_noise(x,0.3) for x in mem_x])
-        #queries = np.array([x+np.random.normal(0,1,size=x.shape) for x in mem_x])
-        rand_query = queries[np.random.randint(queries.shape[0])]
-        lookup_seq = mem.lookup(rand_query,n_step=40,return_seq=True)
-        import pdb; pdb.set_trace();
+        queries = np.array([flip_noise(x,0.30) for x in mem_x])
+        lookup_seq = mem.lookup(queries,n_step=10,return_seq=True)
+        r = np.random.randint(queries.shape[0]) # pick a random query to plot
+        lookup_seq = [l[r] for l in lookup_seq]
         # Visualize transitions for lookup
         viz.disp_states(mem_x,lookup_seq,'./lookup.mp4')
 

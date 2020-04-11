@@ -15,7 +15,7 @@ def disp_states(attractors,sequence,save_file):
     embed_dim = attractors.shape[1]
     
     # Fixed, random projection down to 2D
-    proj = np.random.normal(0,0.05,size=(embed_dim,2))
+    proj = np.random.normal(0,1,size=(embed_dim,2))
 
     # Project attractors
     att = np.matmul(attractors,proj)
@@ -27,6 +27,8 @@ def disp_states(attractors,sequence,save_file):
         fig = plt.figure()
         # Display attractors
         plt.scatter(attx,atty,marker='x',color='r',s=150)
+        plt.ylim((-20,20))
+        plt.xlim((-20,20))
         # Display state
         state = np.matmul(np.array(s)[np.newaxis,:],proj)
         sx,sy = state[:,0],state[:,1]
