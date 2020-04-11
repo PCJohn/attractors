@@ -28,10 +28,14 @@ Results with sequence lengths 4 and 8. The drop in accuracy is less if the seque
 
 **Test on longer sequences**
 
-Train on a short sequence and test on longer sequences
+Train on a sequences of fixed length and test on sequences of different lengths.
 
 <img src="repro_fw/outputs/hid30-longer.png" width="375" height="300" />
 
 **Hopfield nets with discrete states**
+
+      cd hopfield
+      python hopfield.py lookup # standard hopfield memory lookup
+      python hopfield.py sequence # hopfield net hopping over discrete states
 
 <img src="hopfield/sequence.gif" width="375" height="300" />
