@@ -78,7 +78,7 @@ if __name__ == '__main__':
     
     # Generate a sequence obeying the transitions matrix above
     seq_len = 40
-    seq = mem.lookup(x[0],n_step=seq_len) # prompt with the first symbol and generate a sequence
+    seq = mem.lookup(x[0],n_step=seq_len,return_seq=True) # prompt with the first symbol and generate a sequence
     seq_states = [get_state(x,s) for s in seq]
     print('Retrieved sequence:',seq_states)
 
