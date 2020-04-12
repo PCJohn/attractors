@@ -10,7 +10,8 @@ import rnn_mem
 # Add noise to the query: last character in the input sequence
 def add_query_noise(x,level):
     x_ = x.copy()
-    x_[:,-1,:] += np.random.normal(0,level,size=x[:,-1,:].shape)
+    noise = np.random.normal(0,level,size=x[:,-1,:].shape)
+    x_[:,-1,:] += noise
     return x_
 
 
