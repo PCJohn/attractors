@@ -30,7 +30,7 @@ if __name__ == '__main__':
     for model_file,inner_loop in zip(models,inner_loops):
         with tf.Session() as sess:
             if 'FW' in model_file:
-                model = rnn_mem.FastWeights(tx.shape[1],tx.shape[2],learn_embed=False,shared_ln=False,inner_loop=inner_loop)
+                model = rnn_mem.FastWeights(tx.shape[1],tx.shape[2],learn_embed=False,shared_ln=True,inner_loop=inner_loop)
             elif 'LSTM' in model_file:
                 model = rnn_mem.LSTM(tx.shape[1],tx.shape[2],learn_embed=False)
             sess.run(tf.global_variables_initializer())
