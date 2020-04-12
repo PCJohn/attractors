@@ -19,7 +19,7 @@ Add noise to the query (last element in the sequence) and track test accuracy.
 
      python noise.py
 
-Results with sequence lengths 4 and 8. The drop in accuracy is less if the sequence is short, as it needs to save fewer memories. The LSTM model is really sensitive to noise (not too impressive, but something you get right off the bat).
+Results with sequence lengths 4 and 8. The drop in accuracy is less if the sequence is short, as it needs to save fewer memories. The LSTM model is really sensitive to noise (this is quite impressive, given that you get it right off the bat).
 
 <p float="left">
       <img src="repro_fw/outputs/noise-4.png" width="375" height="300" />
