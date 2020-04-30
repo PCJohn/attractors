@@ -1,7 +1,7 @@
 # attractors
 A set of simulations on attractor models
 
-**Reproducing Fast Weights results**
+**Reproducing [Fast Weights](https://arxiv.org/pdf/1610.06258.pdf) results**
 
       cd repro_fw
       python retrieval.py gen_data           # cache datasets in ./data
@@ -30,7 +30,7 @@ Results with sequence lengths 4 and 8. The drop in accuracy is less if the seque
 
 **Hopfield nets with discrete states**
 
-A standard Hopfield model pushes states towards attractors. Once in a basin, the state is stable and doesn't move around (gif on the left). Following section 5.2 in [1], we can add cross-terms to the weight matrix to make the state hop around over attractors (gif on the right). This lets us store sequences of discrete symbols.
+A standard Hopfield model pushes states towards attractors. Once in a basin, the state is stable and doesn't move around (gif on the left). Following section 5.2 in the [World of Attractor Neural Networks](https://www.amazon.com/Modeling-Brain-Function-Attractor-Networks/dp/0521421241), we can add cross-terms to the weight matrix to make the state hop around over attractors (gif on the right). This lets us store sequences of discrete symbols.
 
       cd hopfield
       python hopfield.py lookup     # standard hopfield memory lookup
@@ -41,5 +41,3 @@ A standard Hopfield model pushes states towards attractors. Once in a basin, the
       <img src="hopfield/sequence.gif" width="375" height="300" />
 </p>
 
-
-[1] D.J. Amit (1989) Modeling Brain Function: The World of Attractor Neural Networks
