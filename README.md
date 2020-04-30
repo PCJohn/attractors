@@ -11,7 +11,7 @@ This reproduces the results in section 4.1 of the paper with 30 hidden units (yo
 
 <img src="repro_fw/outputs/seqlen-8.png" width="650" height="400" />
 
-Training in practice: 1. Layer normalization helps a lot particularly if you have different gains, biases for every inner loop iterations. 2. You can use an aggressive learning rate and explicitly drop it after some iterations.
+Training in practice: 1. Layer normalization helps a lot particularly if you have different gains, biases for every inner loop iterations. 2. You can use an aggressive learning rate and explicitly drop it after some iterations. 3. Training is much faster using onehot vectors instead of learned embeddings (this isn't surprising as the associative memory generally works better with sparse vectors).
 
 **Robustness to random noise** 
 
