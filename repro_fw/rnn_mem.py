@@ -48,7 +48,7 @@ class LSTM():
 
 
 class FastWeights():
-    def __init__(self,seq_len,dim,learn_embed=False,inner_loop=1,shared_ln=False):
+    def __init__(self,seq_len,dim,learn_embed=False,inner_loop=1,shared_ln=False,update_rule='hebb'):
         self.seq_len = seq_len
         self.dim = dim
         self.learn_embed = learn_embed
@@ -66,6 +66,7 @@ class FastWeights():
         self.bz = 64
         self.niter = 150000
         self.shared_ln = shared_ln
+        self.update_rule = update_rule
         self.build_graph()
                 
     def build_graph(self):
@@ -93,9 +94,19 @@ class FastWeights():
             z = tf.matmul(self.hid,W) + tf.matmul(x_t,C)
             h_0 = tfu.relu(z)
 
-            # insert in memory
-            self.memmat = self.decay * self.memmat + self.fast_lr * tfu.outer(self.hid,self.hid)
+            # insert in memory with some learning rule
+            if self.update_rule == 'hebb':
+                self.memmat = self.decay * self.memmat + self.fast_lr * tfu.outer(self.hid,self.hid)
             
+            elif self.update_rule == 'storkey':
+                hebb = self.memmat + tfu.outer(self.hid,self.hid) / self.hid_size
+                h = tf.matmul(hebb,tf.expand_dims(self.hid,-1))
+                pre = tfu.outer(tf.squeeze(h,-1),self.hid)
+                post = tf.transpose(pre,perm=[0,2,1])
+                self.memmat = self.decay * self.memmat + self.fast_lr * (hebb - pre - post) / self.hid_size
+            
+            ### end insert ###
+
             # run attractor
             h_s = tf.expand_dims(h_0,-1)
             z_ = tf.expand_dims(z,-1)

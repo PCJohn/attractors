@@ -30,6 +30,7 @@ delim = '?'
 learn_embed = False
 fw_inner_loop = 1
 fw_shared_ln = True
+update_rule = 'hebb'
 ##### *** #####
 
 def ds_file(seq_len):
@@ -112,7 +113,8 @@ if __name__ == '__main__':
                     model = rnn_mem.FastWeights(in_len, embed_dim, 
                                 learn_embed=learn_embed,
                                 inner_loop=fw_inner_loop,
-                                shared_ln=fw_shared_ln)
+                                shared_ln=fw_shared_ln,
+                                update_rule=update_rule)
                 val,loss = rnn_mem.train(sess,model,x,y,vx,vy)
                 plot_val_and_loss(val,loss,modelname)
                 final_val = val[-1]
