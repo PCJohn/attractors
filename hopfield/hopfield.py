@@ -40,19 +40,28 @@ def flip_noise(x,noise_level):
 ##### Memory model #####
 
 class Hopfield():
-    def __init__(self,x,transitions=None):
+    def __init__(self,x,rule='hopfield',transitions=None):
         dim = x.shape[1]
-        self.J = np.matmul(x.T,x) / float(dim)
+        if rule == 'hopfield':
+            self.J = np.matmul(x.T,x) / float(dim)
+            # Add cross-terms so the model hops around on points as discrete states
+            if not (transitions is None):
+                lmbda = 3.0
+                for i in range(transitions.shape[0]):
+                    for j in range(transitions[i].shape[0]):
+                        if i != j:
+                            self.J += lmbda * transitions[i,j] * np.outer(x[i][:,np.newaxis],x[j][:,np.newaxis]) / float(dim)
+            np.fill_diagonal(self.J,0)
         
-        # Add cross-terms so the model hops around on points as discrete states
-        if not (transitions is None):
-            lmbda = 3.0
-            for i in range(transitions.shape[0]):
-                for j in range(transitions[i].shape[0]):
-                    if i != j:
-                        self.J += lmbda * transitions[i,j] * np.outer(x[i][:,np.newaxis],x[j][:,np.newaxis]) / float(dim)
-        np.fill_diagonal(self.J,0)
-         
+        elif rule == 'storkey':
+            self.J = np.zeros((dim,dim))
+            for x_ in x:
+                x_ = x_[np.newaxis,:]
+                h = np.matmul(x_,self.J+np.matmul(x_.T,x_)/float(dim))
+                pre = np.matmul(x_.T,h)
+                post = pre.T
+                self.J += (np.matmul(x_.T,x_) - pre - post) / float(dim)
+            np.fill_diagonal(self.J,0) 
               
     def lookup(self, x, n_step=5, return_seq=False):
         out = x
@@ -68,6 +77,33 @@ class Hopfield():
             return seq
         else:
             return out
+
+##### *** #####
+
+
+##### Comparing update rules #####
+def compare_update_rules(dim=100,prob_one=0.5):
+    num_mem = range(5,dim,5)
+    for update_rule in ['hopfield','storkey']:
+        n_mem_vs_acc = []
+        for n_mem in num_mem:
+            rule_acc = []
+            for _ in range(20):
+                # Generate random vectors with -1, +1 to save in memory
+                rand_x = np.random.random(size=(n_mem,dim))
+                rand_x[rand_x<(1-prob_one)] = -1
+                rand_x[rand_x>prob_one] = 1
+                mem = Hopfield(rand_x,rule=update_rule)
+                pred = mem.lookup(rand_x,n_step=30) # try to recover mem by lookup
+                rule_acc.append(accuracy(pred,rand_x))
+            n_mem_vs_acc.append(np.mean(rule_acc))
+        plt.plot(num_mem,n_mem_vs_acc,marker='o',label=update_rule)
+    # Plot recall accuracy num mem increases
+    plt.xlabel('Number of memories')
+    plt.ylabel('Recall accuracy')
+    plt.ylim((0,1.05))
+    plt.legend()
+    plt.show()
 
 ##### *** #####
 
@@ -112,5 +148,9 @@ if __name__ == '__main__':
 
         # Visualize state transitions
         viz.disp_states(x,seq,'./sequence.mp4')
+
+    # Compare memory capacity with different update rules
+    elif sys.argv[1] == 'update_rule':
+        compare_update_rules(dim=100,prob_one=0.4)
 
 
