@@ -8,7 +8,7 @@ Compare storage capacity of Hopfield nets with different update rules. Insert ra
 
 Plot on the left: unbiased memory vectors (+1 or -1 with probability 0.5)
 
-Plot on the right: correlated memory vectors (+1 and -1 with probability 0.4 and 0.6)
+Plot on the right: correlated memory vectors (+1 or -1 with probability 0.4 and 0.6)
 
       cd hopfield
       python hopfield.py update_rule
