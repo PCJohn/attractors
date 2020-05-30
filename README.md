@@ -67,9 +67,9 @@ We can use the memory module to store the features of the support set. This is s
       
 This will train 5-way, 1-shot models on Omniglot, with and without a memory model and test them on 1000 novel meta tasks. 
 
-  | Without memory | With memory |
-  |----------------|-------------|
-  |                | 0.98 ± 0.04 |
+  | Without memory | With memory  |
+  |----------------|--------------|
+  |  0.907 ± 0.11  | 0.981 ± 0.04 |
 
 These results are close to what is reported in Kaiser et al, but give us the computational efficiency of using attractors instead of nearest neighbours.
 
