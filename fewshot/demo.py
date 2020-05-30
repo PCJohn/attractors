@@ -32,26 +32,27 @@ if __name__ == '__main__':
         blab,plab = sess.run([B_lab,model.pred])
     sess.close()
 
+    num_correct = (plab==blab.argmax(axis=1)).sum()
+
     # Display support set
     for i in range(N):
         ax = plt.subplot(100+N*10+i+1)
         plt.imshow(ds[0][i][:,:,0],cmap='gray')
         ax.set_title(str(ds[1][i].argmax()))
         ax.axis('off')
-    plt.suptitle('Support Set')
-    plt.show()
+    plt.suptitle('Support Set',fontsize=30)
+    plt.savefig(os.path.join(output_dir,'demo_S.png'))
 
     # Display test samples and predictions
     for i in range(episode_len):
         for j in range(N):
             ax = plt.subplot2grid((episode_len,N), (i,j))
             ind = N*i+j
-            print(ind)
             plt.imshow(ds[2][ind][:,:,0],cmap='gray')
-            ax.set_title(str(ds[3][ind].argmax()))
+            ax.set_title(str(plab[ind]))
             ax.axis('off')
-    plt.suptitle('Predictions')
-    plt.show()
+    plt.suptitle('Predictions. Correct: '+str(num_correct)+'/'+str(plab.size),fontsize=20)
+    plt.savefig(os.path.join(output_dir,'demo_B.png'))
 
 
 
