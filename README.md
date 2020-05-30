@@ -60,7 +60,7 @@ Results with sequence lengths 4 and 8. The drop in accuracy is less if the seque
 
 **3. Few Shot Learning with Memory**
 
-We can use the memory module to store the features of the support set. This is similar to [Kaiser et al](https://arxiv.org/pdf/1703.03129.pdf), but with an attractor net as the memory module. 
+We can use the memory module to store the features of the support set. This is similar to Kaiser et al, [Learning to remember rare events](https://arxiv.org/pdf/1703.03129.pdf), but with an attractor net as the memory module. 
 
       cd fewshot
       sh omniglot.sh
