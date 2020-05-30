@@ -62,11 +62,12 @@ class DataGenerator(object):
             self.img_size = config.get('img_size', (84, 84))
             self.dim_input = np.prod(self.img_size)*3
             self.dim_output = self.num_classes
-            metatrain_folder = config.get('metatrain_folder', '../data/miniImagenet/train')
-            if test_set:
-                metaval_folder = config.get('metaval_folder', '../data/miniImagenet/test')
-            else:
-                metaval_folder = config.get('metaval_folder', '../data/miniImagenet/val')
+            metatrain_folder = config.get('metatrain_folder', '../data/metatrain')
+            metaval_folder = config.get('metaval_folder', '../data/metaval')
+            #if test_set:
+            #    metaval_folder = config.get('metaval_folder', '../data/metaval')
+            #else:
+            #    metaval_folder = config.get('metaval_folder', '../data/metaval')
 
             metatrain_folders = [os.path.join(metatrain_folder, label) \
                 for label in os.listdir(metatrain_folder) \
@@ -174,8 +175,8 @@ class DataGenerator(object):
             S = tf.reshape(S,[K*N,28,28,1])
             B = tf.reshape(B,[episode_len*N,28,28,1])
         elif self.datasource == 'miniimagenet':
-            S = tf.reshape(S,[K*N,64,64,1])
-            B = tf.reshape(B,[episode_len*N,64,64,1])
+            S = tf.reshape(S,[K*N,84,84,3])
+            B = tf.reshape(B,[episode_len*N,84,84,3])
         return (S,S_lab,B,B_lab)
 
 

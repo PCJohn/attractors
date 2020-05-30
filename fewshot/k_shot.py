@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 import tfutils as tfu
 
 class Conv():
-    def __init__(self, K, N, episode_len, S, S_lab, B, B_lab, mem):
+    def __init__(self, K, N, episode_len, S, S_lab, B, B_lab, mem, dataset='omniglot'):
         # K-shot vars -- see 2.2 of "Matching Networks"
         self.K = K              # num samples per class
         self.N = N              # num classes
@@ -19,10 +19,14 @@ class Conv():
         self.B_lab = B_lab      # labels for batch
         self.bz = episode_len
         self.mem = mem
-        self.embed_dim = 64
         self.lr = 1e-4
         self.n_iter = 100000
         self.num_meta_test_sets = 2000
+        self.dataset = dataset
+        if dataset == 'omniglot':
+            self.embed_dim = 64
+        elif dataset == 'miniimagenet':
+            self.embed_dim = 64
 
         # Variables for memory module
         self.fast_lr = 1./(self.K*self.N)
@@ -72,11 +76,18 @@ class Conv():
 
     def build_graph(self):
         # Conv weights
-        conv_w = [tfu.conv_wts(3,3,1,64),
-                  tfu.conv_wts(3,3,64,64),
-                  tfu.conv_wts(3,3,64,64),
-                  tfu.conv_wts(3,3,64,64),
-                  tfu.conv_wts(3,3,64,64)]
+        if self.dataset == 'omniglot':
+            conv_w = [tfu.conv_wts(3,3,1,64),
+                      tfu.conv_wts(3,3,64,64),
+                      tfu.conv_wts(3,3,64,64),
+                      tfu.conv_wts(3,3,64,64),
+                      tfu.conv_wts(3,3,64,64)]
+        elif self.dataset == 'miniimagenet':
+            conv_w = [tfu.conv_wts(3,3,3,64),
+                      tfu.conv_wts(3,3,64,64),
+                      tfu.conv_wts(3,3,64,64),
+                      tfu.conv_wts(3,3,64,64),
+                      tfu.conv_wts(3,3,64,64)]
         
         S_embed = self.conv_features(conv_w,self.S) # Embed support set
         # Insert support set in memory
@@ -157,7 +168,8 @@ if __name__ == '__main__':
         model = Conv(K,N,
                      episode_len,
                      S,S_lab,B,B_lab,
-                     mem)
+                     mem,
+                     dataset=dataset)
         sess.run(tf.global_variables_initializer())
 
         # Train
