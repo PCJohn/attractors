@@ -79,4 +79,8 @@ We can also run a nice demo on similar, but different dataset (MNIST) to confirm
       
 This will use the saved model with memory and display a sample support set along with the test samples and predictions.
 
+<p float="left">
+      <img src="fewshot/outputs/demo_S.png" width="375" height="300" />
+      <img src="fewshot/outputs/demo_B.png" width="375" height="300" />
+</p>
 
