@@ -57,3 +57,26 @@ Results with sequence lengths 4 and 8. The drop in accuracy is less if the seque
       <img src="repro_fw/outputs/noise-8.png" width="375" height="300" />
 </p>
 
+
+**3. Few Shot Learning with Memory**
+
+We can use the memory module to store the features of the support set. This is similar to [Kaiser et al](https://arxiv.org/pdf/1703.03129.pdf), but with an attractor net as the memory module. 
+
+      cd fewshot
+      sh omniglot.sh
+      
+This will train 5-way, 1-shot models on Omniglot, with and without a memory model and test them on 1000 novel meta tasks. 
+
+  | Without memory | With memory |
+  |----------------|-------------|
+  |                | 0.98 ± 0.04 |
+
+These results are close to what is reported in Kaiser et al, but give us the computational efficiency of using attractors instead of nearest neighbours.
+
+We can also run a nice demo on similar, but different dataset (MNIST) to confirm we're learning something sensible.
+
+      python demo.py
+      
+This will use the saved model with memory and display a sample support set along with the test samples and predictions.
+
+
