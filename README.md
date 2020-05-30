@@ -4,7 +4,7 @@ A set of simulations on attractor models for memory
 **1. Standard Hopfield Nets**
 
 **Hopfield update rules:**
-Compare storage capacity of Hopfield nets with different update rules. Insert random vectors into a net with 100 units and track recall accuracy. The Storkey update rule gives more capacity with unbiased vectors. It also does much better when the patterns are correlated.
+Compare storage capacity of Hopfield nets with different update rules. Insert random vectors into a net with 100 units and track recall accuracy. The Storkey update rule gives more capacity with unbiased vectors. It also does much better when the patterns are correlated. Note that the outer product rule drops accuracy after 0.14N.
 
 Plot on the left: unbiased memory vectors (+1 or -1 with probability 0.5)
 
