@@ -53,6 +53,7 @@ class Conv():
         for s in range(self.inner_loop):
             step = x_0 + tf.matmul(self.memmat,x_s)
             x_s = tfu.layer_norm(step, self.ln_gain, self.ln_bias)
+            x_s = tf.nn.relu(x_s)
         x_s = tf.squeeze(x_s,-1)
         return x_s
     
