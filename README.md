@@ -60,7 +60,9 @@ Results with sequence lengths 4 and 8. The drop in accuracy is less if the seque
 
 **3. Few Shot Learning with Memory**
 
-We can use the memory module to store the features of the support set. This is similar to Kaiser et al ([Learning to remember rare events](https://arxiv.org/pdf/1703.03129.pdf)), but with an attractor net as the memory module. 
+We can model few-shot learning tasks as described in Vinyals et al [Matching networks](https://arxiv.org/pdf/1606.04080.pdf). We want the probability of a label _y_ given the input _x_ along with a support set _S_ (which contains very few samples per class).
+Here, we extract features from the support set and store them in the memory module. This is similar to Kaiser et al ([Learning to remember rare events](https://arxiv.org/pdf/1703.03129.pdf)), but with an attractor net as the memory module. 
+For inference, we extract features of the input, run the attractor a few times and output an attention over the support set.
 
       cd fewshot
       sh omniglot.sh
